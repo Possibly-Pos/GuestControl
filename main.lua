@@ -6,17 +6,13 @@
 
 local AllowGuests    = false
 local AllowGuestChat = false
-
---=================================================================
--- Make sure that there is no comma at the end, it will break because its stupid
---=================================================================
-
 blacklist = {
 	"Player1",
 	"Player2",
 	"Player3"
 	}
 
+-- Formatting above is how it must be or it won't work correctly.
 --=================================================================
 -- DO NOT TOUCH BEYOND THIS POINT
 --=================================================================
@@ -73,7 +69,7 @@ function onPlayerAuth(name, role, isGuest)
   end
   if blocked then 
     print("onPlayerAuth Breaking, player is blocked.")
-    return "You've Been Banned from this server! Please contact p05#8995 on discord  to request to be unbanned!"
+    return "You've Been Banned from this server! Please contact the server owner on discord to request to be unbanned!"
   end
   print("End onPlayerAuth")
 end
