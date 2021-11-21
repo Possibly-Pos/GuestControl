@@ -48,9 +48,7 @@ function onChatMessage(id, name, message)
 	end
 end
 
-function onPlayerAuth(name, role, isGuest)
-  print("Event onPlayerAuth(name="..name..",role="..role..",guest?="..tostring(isGuest)..")")
-  local playerList = GetPlayers()
+local playerList = GetPlayers()
   blocked = false
   -- Try-Catch Block for block check
   try {
@@ -70,8 +68,6 @@ function onPlayerAuth(name, role, isGuest)
   if blocked then 
     print("onPlayerAuth Breaking, player is blocked.")
     return "You've Been Banned from this server! Please contact the server owner on discord to request to be unbanned!"
-  end
-  print("End onPlayerAuth")
 end
 
 RegisterEvent("onPlayerAuth","onPlayerAuth")
