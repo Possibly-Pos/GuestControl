@@ -41,7 +41,7 @@ end
 -- Events
 
 function onInit()
-	print("BANNED Loaded!")
+	print("PlayerManager Loaded!")
 end
 
 function onChatMessage(id, name, message)
