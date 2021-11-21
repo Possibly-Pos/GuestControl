@@ -1,16 +1,29 @@
 --=================================================================
--- Guest Control - Giving you the control over your guests.
--- By Titch
+-- Guest/Ban Controller!
+-- By p05
+-- Originaly by Titch
 --=================================================================
--- Configuration
---=================================================================
---    Setting        = Value (true/false)
---=================================================================
-local AllowGuests    = true
+
+local AllowGuests    = false
 local AllowGuestChat = false
+
+--=================================================================
+-- Make sure that there is no comma at the end, it will break because its stupid
+--=================================================================
+
+blacklist = {
+	"Player1",
+	"Player2",
+	"Player3"
+	}
+
 --=================================================================
 -- DO NOT TOUCH BEYOND THIS POINT
 --=================================================================
+
+require "Resources/Server/PlayerManager/utils/utils"
+
+-- idk what this is for
 
 local function dump(o)
    if type(o) == 'table' then
@@ -25,6 +38,12 @@ local function dump(o)
    end
 end
 
+-- Events
+
+function onInit()
+	print("BANNED Loaded!")
+end
+
 function onChatMessage(id, name, message)
 	local identifiers = GetPlayerIdentifiers(id)
 	if identifiers == nil and not AllowGuestChat then -- the nil means they are a guest
@@ -34,9 +53,29 @@ function onChatMessage(id, name, message)
 end
 
 function onPlayerAuth(name, role, isGuest)
-	if isGuest and not AllowGuests then
-		return "You must be signed in to join this server!"
-	end
+  print("Event onPlayerAuth(name="..name..",role="..role..",guest?="..tostring(isGuest)..")")
+  local playerList = GetPlayers()
+  blocked = false
+  -- Try-Catch Block for block check
+  try {
+    function()
+      blocked = check(blacklist, name)
+	end,
+	catch {
+      function(error)
+        print("Error @ onPlayerAuth: " .. error)
+     end
+    }
+  }
+  if isGuest and not AllowGuest then
+    print ("onPlayerAuth Breaking, player is a guest.")
+    return "You must be signed in to join this server!"
+  end
+  if blocked then 
+    print("onPlayerAuth Breaking, player is blocked.")
+    return "You've Been Banned from this server! Please contact p05#8995 on discord  to request to be unbanned!"
+  end
+  print("End onPlayerAuth")
 end
 
 RegisterEvent("onPlayerAuth","onPlayerAuth")
