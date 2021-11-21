@@ -1,5 +1,5 @@
 # PlayerManager
 
-Please install this to your `Resources/Server` folder.
+install is in Resources/Server folder.
 
 Bans and Guest Control
