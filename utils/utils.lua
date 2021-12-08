@@ -35,6 +35,6 @@ function linesfrom(file)
 end
 
 function loadWordlist()
-  x = linesfrom("./Resources/Server/SimpleManager/utils/bannedwords.txt")
+  x = linesfrom("./Resources/Server/PlayerManager/utils/bannedwords.txt")
   return x
 end
