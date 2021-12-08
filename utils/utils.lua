@@ -16,3 +16,25 @@ function check(tablex, valuex)
   end
   return false
 end
+
+local function file_exists(file) 
+  local f = io.open(file, "rb")
+  if f then f:close() end
+  return f ~= nil
+end
+
+function linesfrom(file)
+  if not file_exists(file) then
+    return {}
+  end
+  lines = {}
+  for line in io.lines(file) do 
+    lines[#lines + 1] = line
+  end
+  return lines
+end
+
+function loadWordlist()
+  x = linesfrom("./Resources/Server/SimpleManager/utils/bannedwords.txt")
+  return x
+end
