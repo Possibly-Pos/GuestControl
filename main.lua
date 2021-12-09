@@ -3,16 +3,19 @@
 -- By p05
 -- Originaly by Titch
 --=================================================================
-
-local AllowGuests    = false
-local AllowGuestChat = false
+local AllowGuests     = false
+local AllowGuestChat  = false
+local ProfanityBlock  = false  -- This takes priority over the filter, so if you have them both set to true
+local ProfanityFilter = false  -- it will default to blocking the message.
 blacklist = {
 	"Player1",
 	"Player2",
 	"Player3"
 	}
-
--- Formatting above is how it must be or it won't work correctly.
+-- ↑ Formatting above is how it must be or it won't work correctly.
+local bannedMessage = "You've Been Banned from this server! Please contact the server owner on discord to request to be unbanned!"
+local noGuestsMessage = "You must be signed in to join this server!"
+local noGuestChatMessage = "Sorry chat is disabled for guest players on this server. Please register for a BeamMP Account to use the Chat functionality."
 --=================================================================
 -- DO NOT TOUCH BEYOND THIS POINT
 --=================================================================
@@ -38,12 +41,31 @@ end
 
 function onInit()
 	print("PlayerManager Loaded!")
+	chatfilter = loadWordlist()
 end
 
 function onChatMessage(id, name, message)
 	local identifiers = GetPlayerIdentifiers(id)
 	if identifiers == nil and not AllowGuestChat then -- the nil means they are a guest
-		SendChatMessage(id, "Sorry chat is disabled for guest players on this server. Please register for a BeamMP Account to use the Chat functionality.")
+		SendChatMessage(id, noGuestChatMessage)
+		return 1
+	end
+	if ProfanityBlock then -- Block Profanity
+		for k,p in ipairs(chatfilter) do
+			if string.find(message, p, 1, true) then
+				SendChatMessage(id, "You message did not go through because it contains profanity.")
+				return 1
+			end
+		end
+	end
+	if ProfanityFilter then -- Remove Profanityfor k,p in ipairs(chatfilter) do
+		for k,p in ipairs(chatfilter) do
+			if string.find(message, p, 1, true) then
+				message = string.gsub(message, p, string.rep('*', string.len(p)))
+			end
+		end
+		message = "{"..name.."}"..message
+		SendChatMessage(-1, message)
 		return 1
 	end
 end
@@ -65,11 +87,11 @@ function onPlayerAuth(name, role, isGuest)
   }
   if isGuest and not AllowGuest then
     print ("onPlayerAuth Breaking, player is a guest.")
-    return "You must be signed in to join this server!"
+    return noGuestsMessage
   end
   if blocked then 
     print("onPlayerAuth Breaking, player is blocked.")
-    return "You've Been Banned from this server! Please contact the server owner on discord to request to be unbanned!"
+    return bannedMessage
   end
   print("End onPlayerAuth")
 end
