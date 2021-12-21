@@ -1,6 +1,6 @@
 --=================================================================
 -- Guest/Ban Controller!
--- By p05
+-- By TrentonGage11 - p05
 -- Originaly by Titch
 --=================================================================
 local AllowGuests     = false
