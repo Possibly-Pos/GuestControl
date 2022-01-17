@@ -85,7 +85,7 @@ function onPlayerAuth(name, role, isGuest)
      end
     }
   }
-  if isGuest and not AllowGuest then
+  if isGuest and not AllowGuests then
     print ("onPlayerAuth Breaking, player is a guest.")
     return noGuestsMessage
   end
